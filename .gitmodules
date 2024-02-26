@@ -1,0 +1,9 @@
+[submodule "extern/tinyamp_mcal"]
+	path = extern/tinyamp_mcal
+	url = git@github.com:kaiberggold/tinyamp_mcal.git
+[submodule "extern/tinyamp_utils"]
+	path = extern/tinyamp_utils
+	url = git@github.com:kaiberggold/tinyamp_utils.git
+[submodule "extern/avr-libstdcpp"]
+	path = extern/avr-libstdcpp
+	url = https://github.com/modm-io/avr-libstdcpp.git

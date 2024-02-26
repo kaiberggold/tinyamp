@@ -65,3 +65,4 @@ _deps
 tinyamp.code-workspace
 *old
 build
+bin
