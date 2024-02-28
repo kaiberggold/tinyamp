@@ -4,11 +4,14 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/extern/tinyamp_mcal/include",
+                "${workspaceFolder}/extern/tinyamp_utils/include",
+                "/usr/avr/include/**"
             ],
             "defines": [],
             "cStandard": "gnu11",
-            "cppStandard": "gnu++17",
+            "cppStandard": "gnu++20",
             "intelliSenseMode": "linux-gcc-x64",
             "compilerArgs": [
                 "-mmcu=atmega328p",

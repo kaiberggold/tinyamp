@@ -1,25 +1,20 @@
-#include <avr/io.h>
 #include <util/delay.h>
-//#include "USART.h"
+#include "usart_dbg.h"
+#include "digital_out.h"
 
 int main()
 {
-    //initUSART();
-  
-     
-    // Set built-in LED pin as output
-    DDRB |= (1 << DDB5);
-    while (1) {
-    //printString("Hallo Kai!\r\n");  
-        PORTB |=  (1 << PB5);   // LED on
+   
+    utils::UsartDbg dbg;
+    
+    const utils::DigitalOut<mcal::r::port_b,1> led;
+    
+    for (;;)
+    {
         _delay_ms(100);
-        PORTB &= ~(1 << PB5);   // LED off
+        led.set_bit(false);
         _delay_ms(100);
-        PORTB |=  (1 << PB5);   // LED on
-        _delay_ms(100);
-        PORTB &= ~(1 << PB5);   // LED off
-        _delay_ms(100);
-      
+        led.set_bit(true);
+    
     }
-    return 0;
 }
