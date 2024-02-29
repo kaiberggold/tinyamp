@@ -7,7 +7,6 @@
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/extern/tinyamp_mcal/include",
                 "${workspaceFolder}/extern/tinyamp_utils/include",
-                "/usr/avr/include/**"
             ],
             "defines": [],
             "cStandard": "gnu11",
