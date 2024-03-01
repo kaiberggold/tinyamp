@@ -1,11 +1,6 @@
 #include <util/delay.h>
-#include "usart_dbg.h"
-#include "digital_port.h"
 #include <cstdint>
-
-
-
-
+#include "utils.h"
 
 int main()
 {
@@ -18,9 +13,8 @@ int main()
     {
         dbg.print_ascii(65+i);
     }
-    //const utils::DigitalOut<mcal::r::port_b,5> led;
     utils::DigitalPort<std::uint8_t,std::uint8_t,0> portb;
-
+    portb.set_to_out_mask(1U<<5U);
      std::uint8_t i=0;
      for (;;)
      {
@@ -30,11 +24,11 @@ int main()
             i=0;
         }
             i++;
-        _delay_ms(100);
+        _delay_ms(50);
         
         dbg.usart_dbg_step();
         portb.set_port(1U <<5U);
-        _delay_ms(500);
+        _delay_ms(50);
         portb.set_port(0U);
     
     }
