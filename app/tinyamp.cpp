@@ -1,6 +1,5 @@
 #include <util/delay.h>
 #include "usart_dbg.h"
-#include "digital_out.h"
 #include "digital_port.h"
 #include <cstdint>
 
@@ -34,9 +33,8 @@ int main()
         _delay_ms(100);
         
         dbg.usart_dbg_step();
-        //led.set_bit(false);
         portb.set_port(1U <<5U);
-        _delay_ms(100);
+        _delay_ms(500);
         portb.set_port(0U);
     
     }
