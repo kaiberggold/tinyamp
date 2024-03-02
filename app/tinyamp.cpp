@@ -5,8 +5,7 @@
 int main()
 {
    
-    utils::UsartDbg dbg;
-    dbg.usart_dbg_init();
+    utils::UsartDbg dbg(9600);
     _delay_ms(100);
     dbg.usart_transmit_byte(64);
     for(int i=0;i<26;i++)
