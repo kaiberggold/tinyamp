@@ -4,3 +4,6 @@
 [submodule "extern/tinylib_utils"]
 	path = extern/tinylib_utils
 	url = git@github.com:kaiberggold/tinylib_utils.git
+[submodule "extern/tinylib_hal"]
+	path = extern/tinylib_hal
+	url = git@github.com:kaiberggold/tinylib_hal.git

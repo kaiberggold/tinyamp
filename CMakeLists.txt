@@ -38,7 +38,7 @@ include_directories("extern/avr-libstdcpp/include")
 
 
 
-add_subdirectory(extern/tinylib_mcal)
+add_subdirectory(extern/tinylib_hal)
 add_subdirectory(extern/tinylib_utils)
 add_subdirectory(app)
 
