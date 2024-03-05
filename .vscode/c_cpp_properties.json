@@ -5,8 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/extern/tinylib_mcal/include",
-                "${workspaceFolder}/extern/tinylib_utils/include",
+                "${workspaceFolder}/extern/tinylib_hal/include",
+                "${workspaceFolder}/extern/tinylib_utils/include"
             ],
             "defines": [],
             "cStandard": "gnu11",
