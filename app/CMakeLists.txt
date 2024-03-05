@@ -4,5 +4,5 @@ add_avr_executable(
    )
 avr_target_link_libraries(
    tinyamp
-   usart
+   utils
    )
