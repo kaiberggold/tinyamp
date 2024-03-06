@@ -4,7 +4,8 @@
 
 int main()
 {
-
+  utils::I2cCom<std::uint8_t, std::uint8_t, 100000, 0> i2c;
+  i2c.init();
   utils::UsartDbg dbg(9600);
   _delay_ms(100);
   dbg.usart_transmit_byte(64);
