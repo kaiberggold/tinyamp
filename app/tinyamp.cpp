@@ -4,8 +4,12 @@
 
 int main()
 {
-  utils::I2cCom<std::uint8_t, std::uint8_t, 100000, 0> i2c;
+
+  utils::I2cCom<std::uint8_t, std::uint8_t, 0> i2c(UINT32_C(100000));
+  utils::PotiIc<std::uint8_t, std::uint8_t, 0> poti_ic_1(1, 2, i2c);
+  utils::DigiPoti<std::uint8_t, std::uint8_t, 0> poti_1(poti_ic_1, 1);
   i2c.init();
+  poti_1.set_volatile(poti_1.get_max());
   utils::UsartDbg dbg(9600);
   _delay_ms(100);
   dbg.usart_transmit_byte(64);
