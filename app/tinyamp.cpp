@@ -9,9 +9,9 @@ int main()
   utils::PotiIc<std::uint8_t, std::uint8_t, 0> poti_ic_1(1, 2, i2c);
   utils::DigiPoti<std::uint8_t, std::uint8_t, 0> poti_1(poti_ic_1, 1);
   i2c.init();
-  poti_1.set_volatile(poti_1.get_max());
+
   utils::UsartDbg dbg(9600);
-  _delay_ms(100);
+
   dbg.usart_transmit_byte(64);
   for (int i = 0; i < 26; i++)
   {
@@ -34,5 +34,8 @@ int main()
     portb.set_port(1U << 5U);
     _delay_ms(50);
     portb.set_port(0U);
+    poti_1.set_volatile(44);
+    _delay_ms(1000);
+    poti_1.set_volatile(94);
   }
 }
