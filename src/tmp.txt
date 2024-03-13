@@ -1,0 +1,40 @@
+#include <iostream>
+#include <cstdint>
+
+class MyClass {
+public:
+    void function1() {
+        std::cout << "Function 1 called" << std::endl;
+    }
+
+    void function2() {
+        std::cout << "Function 2 called" << std::endl;
+    }
+};
+
+int main() {
+    // Create an object of MyClass
+    MyClass obj;
+
+    // Define function pointers
+    void (MyClass::*funcPtr1)() = &MyClass::function1;
+    void (MyClass::*funcPtr2)() = &MyClass::function2;
+
+    // Cast function pointers to uint16_t
+    uint16_t func1_addr = reinterpret_cast<uint16_t>(funcPtr1);
+    uint16_t func2_addr = reinterpret_cast<uint16_t>(funcPtr2);
+
+    // Create an array of uint16_t
+    uint16_t funcPtrArray[2] = {func1_addr, func2_addr};
+
+    // Loop over the array and call the functions
+    for (int i = 0; i < 2; ++i) {
+        // Cast uint16_t back to function pointer
+        void (MyClass::*func)() = reinterpret_cast<void (MyClass::*)()>(funcPtrArray[i]);
+        
+        // Call the function using the object
+        (obj.*func)();
+    }
+
+    return 0;
+}
