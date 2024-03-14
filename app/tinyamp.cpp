@@ -9,14 +9,14 @@ int main()
   utils::PotiIc<std::uint8_t, std::uint8_t, 0> poti_ic_1(1, 2, i2c);
   utils::DigiPoti<std::uint8_t, std::uint8_t, 0> poti_1(poti_ic_1, 1);
   i2c.init();
-
+#ifdef SERIAL_DBG
   utils::UsartDbg dbg(9600);
-
   dbg.usart_transmit_byte(64);
   for (int i = 0; i < 26; i++)
   {
     dbg.print_ascii(65 + i);
   }
+#endif
   utils::DigitalPort<std::uint8_t, std::uint8_t, 0> portb;
   portb.set_to_out_mask(1U << 5U);
   std::uint8_t i = 0;
