@@ -28,11 +28,9 @@ int main()
     i++;
     led.set_pin(true);
     poti_1.set_volatile(i);
-    poti_2.set_volatile(i % 100);
+    poti_2.set_volatile((i + 32) % 256);
 
     i2c.flush_blocking();
-
-    // i2c.buffer_reset();
 
     _delay_ms(500);
     led.set_pin(false);
