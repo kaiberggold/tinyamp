@@ -19,6 +19,11 @@ int main()
   //   dbg.print_ascii(65 + i);
   // }
 #endif
+
+  // SPI
+  constexpr std::uint8_t clock_scaling = 16;
+  utils::SpiCom<std::uint8_t, std::uint8_t, 0, 0, 5, clock_scaling> spi;
+  spi.init();
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 5> led;
   led.set_to_out_pin();
   led.set_pin(false);
