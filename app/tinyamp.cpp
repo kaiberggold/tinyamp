@@ -21,40 +21,40 @@ int main()
 #endif
 
   // SPI
-  constexpr std::uint8_t clock_scaling = 128;
+  constexpr std::uint8_t clock_scaling = 16;
   constexpr std::uint8_t spi_idx = 0;
-  // utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 2> cs_ad;
-  // cs_ad.set_pin(true);
-  // utils::SpiCom<std::uint8_t, std::uint8_t, spi_idx, cs_ad, clock_scaling> spi;
-  // spi.init();
-  // cs_ad.set_pin(false);
-  // spi.send(137U);
-  // while (spi.transmission_active())
-  // {
-  // }
-  // cs_ad.set_pin(true);
-  // std::uint8_t d1 = spi.read();
-  // spi.send(128U);
-  // while (spi.transmission_active())
-  // {
-  // }
-  // std::uint8_t d2 = spi.read();
-  // spi.send(0U);
-  // while (spi.transmission_active())
-  // {
-  // }
-  // std::uint8_t d3  = spi.read();
+  utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 2> cs_ad;
+  cs_ad.set_pin(true);
+  utils::SpiCom<std::uint8_t, std::uint8_t, spi_idx, cs_ad, clock_scaling> spi;
+  spi.init();
+
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 5> led;
   led.set_to_out_pin();
-  led.set_pin(false);
+  led.set_pin(true);
   int i = 0;
   for (;;)
   {
+    cs_ad.set_pin(false);
+    spi.send(1U);
+    while (spi.transmission_active())
+    {
+    }
+    std::uint8_t d1 = spi.read();
+    spi.send(128U);
+    while (spi.transmission_active())
+    {
+    }
+    std::uint8_t d2 = spi.read();
+    spi.send(0U);
+    while (spi.transmission_active())
+    {
+    }
+    std::uint8_t d3 = spi.read();
+    cs_ad.set_pin(true);
     i++;
     led.set_pin(true);
     poti_1.set_volatile(i);
-    poti_2.set_volatile((i + 32) % 256);
-
+    poti_1.set_volatile(d3);
     i2c.flush_blocking();
 
     _delay_ms(500);
