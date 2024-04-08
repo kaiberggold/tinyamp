@@ -2,14 +2,20 @@
 #include <cstdint>
 #include <util/delay.h>
 // #include <avr/io.h>
-#undef SERIAL_DBG
+// #undef SERIAL_DBG
 int main()
 {
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
-  utils::I2cCom<std::uint8_t, std::uint8_t, 0, i2c_freq> i2c;
-  utils::PotiIc<std::uint8_t, std::uint8_t, 0, i2c_freq> poti_ic_1(88, 0, &i2c);
-  utils::DigiPoti<std::uint8_t, std::uint8_t, 0, i2c_freq> poti_1(poti_ic_1, 0);
-  utils::DigiPoti<std::uint8_t, std::uint8_t, 0, i2c_freq> poti_2(poti_ic_1, 3);
+  constexpr std::uint8_t I2C_BUS_IDX = 0;
+  constexpr std::uint8_t POTI_IC_1_CHIP_SELECT_ADDRESS = 0;
+  constexpr std::uint8_t POTI_ID_0 = 0;
+  constexpr std::uint8_t POTI_ID_3 = 3;
+  constexpr std::uint8_t POTI_CHIP_ADDRESS = 88;
+
+  utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> i2c;
+  utils::PotiIc<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> poti_ic_1(POTI_CHIP_ADDRESS, POTI_IC_1_CHIP_SELECT_ADDRESS, &i2c);
+  utils::DigiPoti<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> poti_1(poti_ic_1, POTI_ID_0);
+  utils::DigiPoti<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> poti_2(poti_ic_1, POTI_ID_3);
   i2c.init();
 #ifdef SERIAL_DBG
   utils::UsartDbg dbg(9600);
@@ -30,35 +36,40 @@ int main()
 
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 5> led;
   led.set_to_out_pin();
-  led.set_pin(true);
-  int i = 0;
+
   for (;;)
   {
     cs_ad.set_pin(false);
-    spi.send(1U);
+    spi.send(0x01);
     while (spi.transmission_active())
     {
     }
     std::uint8_t d1 = spi.read();
-    spi.send(128U);
+    spi.send(0x90);
     while (spi.transmission_active())
     {
     }
     std::uint8_t d2 = spi.read();
-    spi.send(0U);
+    spi.send(0x00);
     while (spi.transmission_active())
     {
     }
     std::uint8_t d3 = spi.read();
     cs_ad.set_pin(true);
-    i++;
-    led.set_pin(true);
-    poti_1.set_volatile(i);
-    poti_1.set_volatile(d3);
-    i2c.flush_blocking();
+    dbg.print_hex_byte(d2);
+    dbg.print_hex_byte(d3);
+    dbg.print_ascii(10);
+    dbg.usart_dbg_flush();
 
-    _delay_ms(500);
-    led.set_pin(false);
-    _delay_ms(500);
+    _delay_ms(2000);
+    // i++;
+    // led.set_pin(true);
+    // poti_1.set_volatile(i);
+    // poti_1.set_volatile(d3);
+    // i2c.flush_blocking();
+
+    // _delay_ms(500);
+    // led.set_pin(false);
+    // _delay_ms(500);
   }
 }
