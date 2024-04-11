@@ -1,6 +1,7 @@
 #include "tinylib_utils.h"
 #include <cstdint>
 #include <util/delay.h>
+#include "../include/interrupts.h"
 // #include <avr/io.h>
 // #undef SERIAL_DBG
 int main()

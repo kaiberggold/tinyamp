@@ -35,11 +35,12 @@ enable_language( CXX )
 include_directories("extern/avr-libstdcpp/include")
 #include_directories("extern/tinyamp_mcal")
 #include_directories("extern/tinyamp_utils")
-#include_directories("app")
+#include_directories("src")
 
 
 
 add_subdirectory(extern/tinylib_hal)
 add_subdirectory(extern/tinylib_utils)
+#add_subdirectory(src)
 add_subdirectory(app)
 
