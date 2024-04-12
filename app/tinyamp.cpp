@@ -45,7 +45,7 @@ int main()
     while (spi.transmission_active())
     {
     }
-    std::uint8_t d1 = spi.read();
+    spi.read();
     spi.send(0x90);
     while (spi.transmission_active())
     {
