@@ -14,7 +14,7 @@ int main()
   constexpr std::uint8_t POTI_CHIP_ADDRESS = 88;
 
   utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> i2c;
-  utils::PotiIc<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> poti_ic_1(POTI_CHIP_ADDRESS, POTI_IC_1_CHIP_SELECT_ADDRESS, &i2c);
+  utils::Mp44xx<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> poti_ic_1(POTI_CHIP_ADDRESS, POTI_IC_1_CHIP_SELECT_ADDRESS, &i2c);
   utils::DigiPoti<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> poti_1(poti_ic_1, POTI_ID_0);
   utils::DigiPoti<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> poti_2(poti_ic_1, POTI_ID_3);
   i2c.init();
