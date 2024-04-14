@@ -1,7 +1,9 @@
 #include "tinylib_utils.h"
+#include "hal.h"
 #include <cstdint>
 #include <util/delay.h>
 // #include <avr/interrupt.h>
+constexpr std::uint16_t start_time = UINT16_C(0xFC00);
 #include "../include/interrupt_vectors.h"
 //  #include <avr/io.h>
 //  #undef SERIAL_DBG
@@ -15,7 +17,7 @@
 int main()
 {
   utils::Interrupts::enable_all_interrupts();
-  utils::Timer<std::uint8_t, std::uint8_t, 0>::init();
+  hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
   constexpr std::uint8_t I2C_BUS_IDX = 0;
   constexpr std::uint8_t POTI_IC_1_CHIP_SELECT_ADDRESS = 0;

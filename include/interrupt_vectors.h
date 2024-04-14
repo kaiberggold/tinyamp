@@ -12,6 +12,6 @@ void __vector_13(void)
 
     std::uint8_t sreg = hal::HalRegAccess<std::uint8_t, std::uint8_t, hal::SREG>::get_reg();
     hal::disable_all_interrupts();
-    hal::HalRegAccess<std::uint16_t, std::uint16_t, hal::TCNT134[0]>::reg_set(UINT16_C(0xEE00));
+    hal::HalRegAccess<std::uint16_t, std::uint16_t, hal::TCNT134[0]>::reg_set(start_time);
     hal::HalRegAccess<std::uint8_t, std::uint8_t, hal::SREG>::reg_set(sreg);
 }
