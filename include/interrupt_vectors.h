@@ -9,9 +9,5 @@ extern "C" void __vector_13(void) __attribute__((signal, used, externally_visibl
 void __vector_13(void)
 {
     hal::HalDigitalPort<std::uint8_t, std::uint8_t, 0>::reg_xor(1U << 5);
-
-    std::uint8_t sreg = hal::HalRegAccess<std::uint8_t, std::uint8_t, hal::SREG>::get_reg();
-    hal::disable_all_interrupts();
-    hal::HalRegAccess<std::uint16_t, std::uint16_t, hal::TCNT134[0]>::reg_set(start_time);
-    hal::HalRegAccess<std::uint8_t, std::uint8_t, hal::SREG>::reg_set(sreg);
+    hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>::irq_reset(start_time);
 }
