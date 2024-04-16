@@ -21,11 +21,12 @@ int main()
   constexpr std::uint8_t POTI_ID_3 = 3;
   constexpr std::uint8_t MPC4442_1_ADDRESS = 88;
 
-  utils::I2cCom<std::uint8_t, std::uint8_t> i2c(I2C_BUS_IDX, i2c_freq);
-  utils::Mp44xx<std::uint8_t, std::uint8_t> mpc4442_1(MPC4442_1_ADDRESS, MPC4442_1_CHIP_SELECT_ADDRESS, &i2c);
-  utils::DigiPoti<std::uint8_t, std::uint8_t> poti_1(mpc4442_1, POTI_ID_0);
-  utils::DigiPoti<std::uint8_t, std::uint8_t> poti_2(mpc4442_1, POTI_ID_3);
-  i2c.init<I2C_BUS_IDX, i2c_freq>();
+  utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> i2c;
+  using Mp44xx_t = utils::Mp44xx<utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq>, std::uint8_t, std::uint8_t>;
+  Mp44xx_t mpc4442_1(MPC4442_1_ADDRESS, MPC4442_1_CHIP_SELECT_ADDRESS, i2c);
+  utils::DigiPoti<Mp44xx_t, std::uint8_t, std::uint8_t> poti_1(mpc4442_1, POTI_ID_0);
+  utils::DigiPoti<Mp44xx_t, std::uint8_t, std::uint8_t> poti_2(mpc4442_1, POTI_ID_3);
+  i2c.init();
 #ifdef SERIAL_DBG
   utils::UsartDbg dbg(9600);
   // dbg.usart_transmit_byte(64);
