@@ -41,42 +41,50 @@ int main()
   // SPI
   constexpr std::uint8_t clock_scaling = 16;
   constexpr std::uint8_t spi_idx = 0;
-  utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 2> cs_ad;
+  using cs_ad_t = utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 2>;
+  cs_ad_t cs_ad;
   cs_ad.set_pin(true);
-  utils::SpiComStatic<std::uint8_t, std::uint8_t, spi_idx, cs_ad, clock_scaling> spi_static;
+  using spi_static_t = utils::SpiComStatic<std::uint8_t, std::uint8_t, spi_idx, cs_ad, clock_scaling>;
+  spi_static_t spi_static;
   spi_static.init();
 
-  utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 5> led;
+  using Mpc3202_t = utils::Mpc3202<spi_static_t, std::uint8_t, std::uint8_t, cs_ad_t>;
+  using AdIcStatic_t = ifc::AdIcStaticIf<Mpc3202_t, spi_static_t, std::uint8_t, std::uint8_t>;
+  // AdIcStatic_t mp3202;
+  // std::uint16_t t = mp3202.get_raw_value();
+
+  utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 5>
+      led;
   led.set_to_out_pin();
   led.set_pin(false);
   std::uint8_t i = 0;
   for (;;)
   {
     i++;
-    // cs_ad.set_pin(false);
-    // spi.send(0x01);
-    // while (spi.transmission_active())
-    // {
-    // }
-    // spi.read();
-    // spi.send(0x90);
-    // while (spi.transmission_active())
-    // {
-    // }
-    // std::uint8_t d2 = spi.read();
-    // spi.send(0x00);
-    // while (spi.transmission_active())
-    // {
-    // }
-    // std::uint8_t d3 = spi.read();
-    // cs_ad.set_pin(true);
-    // dbg.print_hex_byte(d2);
-    // dbg.print_hex_byte(d3);
-    // dbg.print_ascii(10);
-    // dbg.usart_dbg_flush();
+    AdIcStatic_t::enable();
+    AdIcStatic_t::template send<0>();
+    while (spi_static.transmission_active())
+    {
+    }
+    spi_static.read();
+    spi_static.send(0x90);
+    while (spi_static.transmission_active())
+    {
+    }
+    std::uint8_t d2 = spi_static.read();
+    spi_static.send(0x00);
+    while (spi_static.transmission_active())
+    {
+    }
+    std::uint8_t d3 = spi_static.read();
+    cs_ad.set_pin(true);
+    dbg.print_hex_byte(d2);
+    dbg.print_hex_byte(d3);
+    dbg.print_ascii(10);
+    dbg.usart_dbg_flush();
 
-    // _delay_ms(2000);
-    // i++;
+    _delay_ms(2000);
+    i++;
 
     led.set_pin(true);
     poti_1.set_volatile(i);
