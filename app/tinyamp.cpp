@@ -39,12 +39,12 @@ int main()
 #endif
 
   // SPI
-  // constexpr std::uint8_t clock_scaling = 16;
-  // constexpr std::uint8_t spi_idx = 0;
-  // utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 2> cs_ad;
-  // cs_ad.set_pin(true);
-  // utils::SpiCom<std::uint8_t, std::uint8_t, spi_idx, cs_ad, clock_scaling> spi;
-  // spi.init();
+  constexpr std::uint8_t clock_scaling = 16;
+  constexpr std::uint8_t spi_idx = 0;
+  utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 2> cs_ad;
+  cs_ad.set_pin(true);
+  utils::SpiComStatic<std::uint8_t, std::uint8_t, spi_idx, cs_ad, clock_scaling> spi_static;
+  spi_static.init();
 
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 5> led;
   led.set_to_out_pin();
