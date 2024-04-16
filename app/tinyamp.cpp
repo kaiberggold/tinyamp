@@ -23,10 +23,9 @@ int main()
 
   using I2C_t = utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq>;
   using Mp44xx_t = utils::Mp44xx<I2C_t *, std::uint8_t, std::uint8_t>;
-  using PotiIcIf_t = utils::PotiIcIf<Mp44xx_t, I2C_t *, std::uint8_t, std::uint8_t>;
+  using PotiIcIf_t = ifs::PotiIcIf<Mp44xx_t, I2C_t *, std::uint8_t, std::uint8_t>;
   I2C_t i2c;
-  //  Mp44xx_t mpc4442_1(MPC4442_1_ADDRESS, MPC4442_1_CHIP_SELECT_ADDRESS, &i2c);
-  utils::PotiIcIf<Mp44xx_t, I2C_t *, std::uint8_t, std::uint8_t> poti_ic_1(MPC4442_1_ADDRESS, MPC4442_1_CHIP_SELECT_ADDRESS, &i2c);
+  PotiIcIf_t poti_ic_1(MPC4442_1_ADDRESS, MPC4442_1_CHIP_SELECT_ADDRESS, &i2c);
   utils::DigiPoti<PotiIcIf_t, std::uint8_t, std::uint8_t> poti_1(poti_ic_1, POTI_ID_0);
   utils::DigiPoti<PotiIcIf_t, std::uint8_t, std::uint8_t> poti_2(poti_ic_1, POTI_ID_3);
   i2c.init();
