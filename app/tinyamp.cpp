@@ -4,15 +4,15 @@
 #include <util/delay.h>
 // #include <avr/interrupt.h>
 constexpr std::uint16_t start_time = UINT16_C(0xFC00);
-#include "../include/interrupt_vectors.h"
-//  #include <avr/io.h>
-//  #undef SERIAL_DBG
+// #include "../include/interrupt_vectors.h"
+//   #include <avr/io.h>
+#undef SERIAL_DBG
 
 int main()
 {
   // generic setup
-  utils::Interrupts::enable_all_interrupts();
-  hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
+  // utils::Interrupts::enable_all_interrupts();
+  // hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
 
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
   constexpr std::uint8_t I2C_BUS_IDX = 0;
@@ -21,9 +21,10 @@ int main()
   constexpr std::uint8_t POTI_ID_3 = 3;
   constexpr std::uint8_t MPC4442_1_ADDRESS = 88;
 
-  utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq> i2c;
-  using Mp44xx_t = utils::Mp44xx<utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq>, std::uint8_t, std::uint8_t>;
-  Mp44xx_t mpc4442_1(MPC4442_1_ADDRESS, MPC4442_1_CHIP_SELECT_ADDRESS, i2c);
+  using I2C_t = utils::I2cCom<std::uint8_t, std::uint8_t, I2C_BUS_IDX, i2c_freq>;
+  using Mp44xx_t = utils::Mp44xx<I2C_t *, std::uint8_t, std::uint8_t>;
+  I2C_t i2c;
+  Mp44xx_t mpc4442_1(MPC4442_1_ADDRESS, MPC4442_1_CHIP_SELECT_ADDRESS, &i2c);
   utils::DigiPoti<Mp44xx_t, std::uint8_t, std::uint8_t> poti_1(mpc4442_1, POTI_ID_0);
   utils::DigiPoti<Mp44xx_t, std::uint8_t, std::uint8_t> poti_2(mpc4442_1, POTI_ID_3);
   i2c.init();
@@ -75,13 +76,14 @@ int main()
 
     // _delay_ms(2000);
     // i++;
-    // led.set_pin(true);
-    poti_1.set_volatile(i);
-    // poti_1.set_volatile(d3);
-    //  // i2c.flush_blocking();
 
-    // _delay_ms(500);
-    // led.set_pin(false);
-    // _delay_ms(500);
+    led.set_pin(true);
+    poti_1.set_volatile(i);
+    //    poti_2.set_volatile(i);
+    i2c.flush_blocking();
+
+    _delay_ms(500);
+    led.set_pin(false);
+    _delay_ms(500);
   }
 }
