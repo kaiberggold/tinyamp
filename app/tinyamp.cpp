@@ -41,15 +41,19 @@ int main()
   // SPI
   constexpr std::uint8_t clock_scaling = 16;
   constexpr std::uint8_t spi_idx = 0;
-  using cs_ad_t = utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 2>;
-  cs_ad_t cs_ad;
-  cs_ad.set_pin(true);
-  using spi_static_t = utils::SpiComStatic<std::uint8_t, std::uint8_t, spi_idx, cs_ad, clock_scaling>;
+  constexpr std::uint8_t spi_mode = 0;
+  constexpr std::uint8_t spi_cs_port = 0;
+  constexpr std::uint8_t spi_cs_pin = 2;
+
+  using ad_cs_digital_pin_t = utils::DigitalPin<std::uint8_t, std::uint8_t, spi_cs_port, spi_cs_pin>;
+  // cs_ad_t cs_ad;
+  // cs_ad.set_pin(true);
+  using spi_static_t = utils::SpiComStatic<std::uint8_t, std::uint8_t, spi_idx, clock_scaling, spi_mode, ad_cs_digital_pin_t>;
   spi_static_t spi_static;
   spi_static.init();
 
-  using Mpc3202_t = utils::Mpc3202<spi_static_t, std::uint8_t, std::uint8_t, cs_ad_t>;
-  using AdIcStatic_t = ifc::AdIcStaticIf<Mpc3202_t, spi_static_t, std::uint8_t, std::uint8_t>;
+  using Mpc3202_t = utils::Mpc3202<std::uint8_t, std::uint8_t, spi_static_t, ad_cs_digital_pin_t>;
+  using AdIcStatic_t = ifc::AdIcStaticIf<Mpc3202_t, std::uint8_t, std::uint8_t, spi_static_t, ad_cs_digital_pin_t>;
   // AdIcStatic_t mp3202;
   // std::uint16_t t = mp3202.get_raw_value();
 
@@ -62,7 +66,7 @@ int main()
   {
     i++;
     AdIcStatic_t::enable();
-
+    _delay_us(10);
     AdIcStatic_t::template send<0>();
     AdIcStatic_t::bus_transmission_wait_blocking();
     AdIcStatic_t::read();
