@@ -4,7 +4,7 @@
 #include <util/delay.h>
 // #include <avr/interrupt.h>
 constexpr std::uint16_t start_time = UINT16_C(0xFC00);
-// #include "../include/interrupt_vectors.h"
+#include "../include/interrupt_vectors.h"
 //   #include <avr/io.h>
 #undef SERIAL_DBG
 
@@ -62,22 +62,21 @@ int main()
   {
     i++;
     AdIcStatic_t::enable();
+
     AdIcStatic_t::template send<0>();
-    while (spi_static.transmission_active())
-    {
-    }
-    spi_static.read();
-    spi_static.send(0x90);
-    while (spi_static.transmission_active())
-    {
-    }
-    std::uint8_t d2 = spi_static.read();
-    spi_static.send(0x00);
-    while (spi_static.transmission_active())
-    {
-    }
-    std::uint8_t d3 = spi_static.read();
-    cs_ad.set_pin(true);
+    AdIcStatic_t::bus_transmission_wait_blocking();
+    AdIcStatic_t::read();
+
+    AdIcStatic_t::template send<1>();
+    AdIcStatic_t::bus_transmission_wait_blocking();
+    std::uint8_t d2 = AdIcStatic_t::read();
+
+    AdIcStatic_t::template send<2>();
+    AdIcStatic_t::bus_transmission_wait_blocking();
+    std::uint8_t d3 = AdIcStatic_t::read();
+
+    AdIcStatic_t::disable();
+
     dbg.print_hex_byte(d2);
     dbg.print_hex_byte(d3);
     dbg.print_ascii(10);
