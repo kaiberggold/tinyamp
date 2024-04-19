@@ -29,11 +29,10 @@ void __vector_17(void)
         ad_raw_val_0 = static_cast<std ::uint16_t>(AdIcStatic_t::read()) << 8;
         AdIcStatic_t::template send<2>();
         break;
-    case 3:
+    default:
         ad_raw_val_0 |= static_cast<std ::uint16_t>(AdIcStatic_t::read());
         spi0_state = 0;
         AdIcStatic_t::disable();
         break;
-    default:
     }
 }
