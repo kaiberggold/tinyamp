@@ -35,7 +35,8 @@ int main()
   led.set_pin(true);
 #ifdef INTERRUPTS
   utils::Interrupts::enable_all_interrupts();
-  hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
+  using timer_1_t = hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>;
+  utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
 #endif
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
   constexpr std::uint8_t I2C_BUS_IDX = 0;
