@@ -9,7 +9,7 @@
 // #include <avr/interrupt.h>
 
 // used in interrupt_vectors, so defined here
-constexpr std::uint16_t start_time = UINT16_C(0xFFFD);
+constexpr std::uint16_t start_time = UINT16_C(0xFFAD);
 constexpr std::uint8_t clock_scaling = 16;
 constexpr std::uint8_t spi_idx = 0;
 constexpr std::uint8_t spi_mode = 0;
@@ -105,9 +105,9 @@ int main()
     i++;
 
     led.set_pin(true);
-    // poti_1.set_volatile(i);
-    //     poti_2.set_volatile(i);
-    // i2c.flush_blocking();
+    poti_1.set_volatile(i);
+    poti_2.set_volatile(i);
+    i2c.flush_blocking();
 
     _delay_ms(500);
     led.set_pin(false);
