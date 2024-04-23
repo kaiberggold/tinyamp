@@ -19,7 +19,7 @@ using ad_cs_digital_pin_t = utils::DigitalPin<std::uint8_t, std::uint8_t, spi_cs
 using spi_static_t = utils::SpiComStatic<std::uint8_t, std::uint8_t, spi_idx, clock_scaling, spi_mode, ad_cs_digital_pin_t>;
 using Mpc3202_t = utils::Mpc3202<std::uint8_t, std::uint8_t, spi_static_t, ad_cs_digital_pin_t>;
 using AdIcStatic_t = ifc::AdIcStaticIf<Mpc3202_t, std::uint8_t, std::uint8_t, spi_static_t, ad_cs_digital_pin_t>;
-
+using timer_1_t = hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>;
 static volatile std::uint8_t spi0_state = 0;
 static volatile std::uint16_t ad_raw_val_0 = 0;
 
@@ -35,7 +35,7 @@ int main()
   led.set_pin(true);
 #ifdef INTERRUPTS
   utils::Interrupts::enable_all_interrupts();
-  using timer_1_t = hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>;
+
   utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
 #endif
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);

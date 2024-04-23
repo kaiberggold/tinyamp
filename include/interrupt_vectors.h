@@ -10,7 +10,7 @@ void __vector_13(void)
     AdIcStatic_t::enable();
     AdIcStatic_t::template send<0>();
     //  hal::HalDigitalPort<std::uint8_t, std::uint8_t, 0>::reg_xor(1U << 5);
-    hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>::irq_reset(start_time);
+    utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::irq_reset(start_time);
 }
 
 // spi0 finished
