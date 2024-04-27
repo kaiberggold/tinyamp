@@ -22,7 +22,7 @@ using AdIcStatic_t = ifc::AdIcStaticIf<Mpc3202_t, std::uint8_t, std::uint8_t, sp
 using timer_1_t = hal::TimerT<std::uint8_t, std::uint8_t, std::uint16_t, 0>;
 template <std::uint8_t port_idx, std::uint8_t pin_idx>
 using digital_pin_t = utils::DigitalPin<std::uint8_t, std::uint8_t, port_idx, pin_idx>;
-using rot_1_t = utils::RotaryEncoderStatic<std::uint8_t, std::uint8_t, digital_pin_t<0, 2>, digital_pin_t<0, 3>>;
+using rot_1_t = utils::RotaryEncoderStatic<std::uint8_t, std::uint8_t, digital_pin_t<1, 0>, digital_pin_t<1, 1>>;
 
 static volatile std::uint8_t spi0_state = 0;
 static volatile std::uint16_t ad_raw_val_0 = 0;
@@ -34,9 +34,10 @@ static volatile std::uint16_t ad_raw_val_0 = 0;
 
 int main()
 {
-  digital_pin_t<0, 1> led;
+  // digital_pin_t<0, 1> led;
+  utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1> led;
 
-  rot_1_t::init();
+  // 6rot_1_t::init();
 
   led.set_to_out_pin();
   led.set_pin(true);
@@ -82,7 +83,6 @@ int main()
   std::uint8_t i = 0;
   for (;;)
   {
-    i++;
 // #define ADMAN
 #ifdef ADMAN
     AdIcStatic_t::enable();
@@ -112,9 +112,9 @@ int main()
     i++;
 
     led.set_pin(true);
-    poti_1.set_volatile(i);
-    poti_2.set_volatile(i);
-    i2c.flush_blocking();
+    // poti_1.set_volatile(i);
+    // poti_2.set_volatile(i);
+    // i2c.flush_blocking();
 
     _delay_ms(500);
     led.set_pin(false);
