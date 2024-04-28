@@ -34,17 +34,23 @@ static volatile std::uint16_t ad_raw_val_0 = 0;
 
 int main()
 {
-  // digital_pin_t<0, 1> led;
+  digital_pin_t<0, 0>::set_to_out_pin();
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1> led;
 
   // 6rot_1_t::init();
 
   led.set_to_out_pin();
-  led.set_pin(true);
+  digital_pin_t<1, 0>::set_pin(true);
+  digital_pin_t<1, 0>::set_to_in_pin();
+  led.set_to_out_pin();
+
 #ifdef INTERRUPTS
   utils::Interrupts::enable_all_interrupts();
 
   utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
+  utils::Interrupts::enable_pin_change_port<std::uint8_t, std::uint8_t, 1>();
+  utils::Interrupts::enable_pin_change_pin<std::uint8_t, std::uint8_t, 9>();
+
 #endif
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
   constexpr std::uint8_t I2C_BUS_IDX = 0;
@@ -70,13 +76,13 @@ int main()
   // }
 #endif
 
-  // SPI
-
+// SPI
+#ifdef SPI
   spi_static_t::init();
 #ifdef INTERRUPTS
   spi_static_t::enable_interrupt();
 #endif
-
+#endif
   // AdIcStatic_t mp3202;
   // std::uint16_t t = mp3202.get_raw_value();
 

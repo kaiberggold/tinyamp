@@ -14,11 +14,11 @@ void __vector_13(void)
 }
 
 // pin change interrupt
-// extern "C" void __vector_3(void) __attribute__((signal, used, externally_visible));
-// void __vector_3(void)
-// {
-//     digital_pin_t<0, 0>::set_pin_toggle();
-// }
+extern "C" void __vector_4(void) __attribute__((signal, used, externally_visible));
+void __vector_4(void)
+{
+    digital_pin_t<0, 0>::set_pin_toggle();
+}
 
 // // spi0 finished
 // extern "C" void __vector_17(void) __attribute__((signal, used, externally_visible));
