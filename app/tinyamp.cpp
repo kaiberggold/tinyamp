@@ -35,21 +35,22 @@ static volatile std::uint16_t ad_raw_val_0 = 0;
 int main()
 {
   digital_pin_t<0, 0>::set_to_out_pin();
+  digital_pin_t<0, 0>::set_pin(true);
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1> led;
 
   // 6rot_1_t::init();
 
   led.set_to_out_pin();
+  led.set_pin(true);
   digital_pin_t<1, 0>::set_pin(true);
   digital_pin_t<1, 0>::set_to_in_pin();
-  led.set_to_out_pin();
 
 #ifdef INTERRUPTS
   utils::Interrupts::enable_all_interrupts();
 
   utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
   utils::Interrupts::enable_pin_change_port<std::uint8_t, std::uint8_t, 1>();
-  utils::Interrupts::enable_pin_change_pin<std::uint8_t, std::uint8_t, 9>();
+  utils::Interrupts::enable_pin_change_pin<std::uint8_t, std::uint8_t, 8>();
 
 #endif
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
@@ -118,12 +119,13 @@ int main()
     i++;
 
     led.set_pin(true);
-    // poti_1.set_volatile(i);
-    // poti_2.set_volatile(i);
-    // i2c.flush_blocking();
-
+    //  poti_1.set_volatile(i);
+    //  poti_2.set_volatile(i);
+    //  i2c.flush_blocking();
+    // digital_pin_t<0, 0>::set_pin_toggle();
     _delay_ms(500);
     led.set_pin(false);
+    // digital_pin_t<0, 0>::set_pin_toggle();
     _delay_ms(500);
   }
 }
