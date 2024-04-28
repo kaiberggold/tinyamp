@@ -2,6 +2,7 @@
 // #include <avr/io.h>
 // #include <avr/interrupt.h>
 #include <cstdint>
+#include "usart_dbg.h"
 
 // timer1 overflow
 extern "C" void __vector_13(void) __attribute__((signal, used, externally_visible));
@@ -18,6 +19,10 @@ extern "C" void __vector_4(void) __attribute__((signal, used, externally_visible
 void __vector_4(void)
 {
     digital_pin_t<0, 0>::set_pin_toggle();
+    std::uint8_t val = utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 0>::get_pin() * 2 + utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1>::get_pin();
+    dbg.print_ascii('A');
+    dbg.print_hex_byte(val);
+    dbg.usart_dbg_flush();
 }
 
 // // spi0 finished

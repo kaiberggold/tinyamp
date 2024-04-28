@@ -2,7 +2,7 @@
 #include "hal.h"
 #include <cstdint>
 #include <util/delay.h>
-#undef SERIAL_DBG
+// #undef SERIAL_DBG
 #define INTERRUPTS
 
 // #include <avr/io.h>
@@ -38,19 +38,19 @@ int main()
   digital_pin_t<0, 0>::set_pin(true);
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1> led;
 
-  // 6rot_1_t::init();
+  rot_1_t::init();
 
   led.set_to_out_pin();
   led.set_pin(true);
-  digital_pin_t<1, 0>::set_pin(true);
-  digital_pin_t<1, 0>::set_to_in_pin();
+  // digital_pin_t<1, 0>::set_pin(true);
+  // digital_pin_t<1, 0>::set_to_in_pin();
 
 #ifdef INTERRUPTS
   utils::Interrupts::enable_all_interrupts();
 
   utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
-  utils::Interrupts::enable_pin_change_port<std::uint8_t, std::uint8_t, 1>();
-  utils::Interrupts::enable_pin_change_pin<std::uint8_t, std::uint8_t, 8>();
+  // utils::Interrupts::enable_pin_change_port<std::uint8_t, std::uint8_t, 1>();
+  // utils::Interrupts::enable_pin_change_pin<std::uint8_t, std::uint8_t, 8>();
 
 #endif
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
