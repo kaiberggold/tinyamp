@@ -26,6 +26,13 @@ using rot_1_t = utils::RotaryEncoderStatic<std::uint8_t, std::uint8_t, digital_p
 
 static volatile std::uint8_t spi0_state = 0;
 static volatile std::uint16_t ad_raw_val_0 = 0;
+utils::RotaryEncoderVirtual<std::uint8_t, std::uint8_t> rot_virtual_1(0, 100, 50, 5);
+
+std::uint8_t rot_1_pos_raw = rot_1_t::get_raw_state();
+std::uint8_t rot_1_pos_raw_mem = rot_1_pos_raw;
+std::uint8_t rot_1_dir = 0;
+
+// utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 0>::get_pin() * 2 + utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1>::get_pin());
 
 #ifdef INTERRUPTS
 
@@ -77,7 +84,7 @@ int main()
   // }
 #endif
 
-// SPI
+  // SPI
 #ifdef SPI
   spi_static_t::init();
 #ifdef INTERRUPTS
@@ -90,7 +97,7 @@ int main()
   std::uint8_t i = 0;
   for (;;)
   {
-// #define ADMAN
+    // #define ADMAN
 #ifdef ADMAN
     AdIcStatic_t::enable();
     _delay_us(10);
