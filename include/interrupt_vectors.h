@@ -19,16 +19,18 @@ void __vector_13(void)
 extern "C" void __vector_4(void) __attribute__((signal, used, externally_visible));
 void __vector_4(void)
 {
-    rot_1_pos_raw_mem = rot_1_pos_raw;
-    rot_1_pos_raw = rot_1_t::get_raw_state();
-    if (rot_1_dir == 0)
-    {
-        ;
-    }
-    else
-    {
-        ;
-    }
+    rot_1_state_raw_mem = rot_1_state_raw;
+    rot_1_state_raw = rot_1_t::get_raw_state();
+
+    std::int8_t step = rot_1_t::get_step(rot_1_state_raw_mem, rot_1_state_raw);
+    rot_1_pos += step;
+#ifdef SERIAL_DBG
+
+    dbg.print_hex_byte(rot_1_pos);
+    dbg.print_hex_byte(step);
+    dbg.print_ascii(10);
+    dbg.usart_dbg_flush();
+#endif
 }
 
 // // spi0 finished
