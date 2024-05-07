@@ -11,7 +11,6 @@ void __vector_13(void)
 {
     AdIcStatic_t::enable();
     AdIcStatic_t::template send<0>();
-    //  hal::HalDigitalPort<std::uint8_t, std::uint8_t, 0>::reg_xor(1U << 5);
     utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::irq_reset(start_time);
 }
 
@@ -24,6 +23,8 @@ void __vector_4(void)
 
     std::int8_t step = rot_1_t::get_step(rot_1_state_raw_mem, rot_1_state_raw);
     rot_1_pos += step;
+    // if (step != 0)
+    //   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 0>::set_pin_toggle();
 #ifdef SERIAL_DBG
 
     dbg.print_hex_byte(rot_1_pos);

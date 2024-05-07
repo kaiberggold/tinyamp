@@ -2,7 +2,7 @@
 #include "hal.h"
 #include <cstdint>
 #include <util/delay.h>
-// #undef SERIAL_DBG
+#undef SERIAL_DBG
 #define INTERRUPTS
 
 // #include <avr/io.h>
