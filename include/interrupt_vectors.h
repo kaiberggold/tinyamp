@@ -18,20 +18,29 @@ void __vector_13(void)
 extern "C" void __vector_4(void) __attribute__((signal, used, externally_visible));
 void __vector_4(void)
 {
-    rot_1_state_raw_mem = rot_1_state_raw;
-    rot_1_state_raw = rot_1_t::get_raw_state();
+    swi_1 = static_cast<std::uint8_t>(utils::DigitalPin<std::uint8_t, std::uint8_t, 1, 2>::get_pin());
 
-    std::int8_t step = rot_1_t::get_step(rot_1_state_raw_mem, rot_1_state_raw);
-    rot_1_pos += step;
-    rot_virtual_1.step(step);
-    // if (step != 0)
-    //   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 0>::set_pin_toggle();
+    std::uint8_t tmp = rot_1_t::get_raw_state();
+    if (tmp != rot_1_state_raw_mem)
+    {
+        rot_1_state_raw_mem = rot_1_state_raw;
+        rot_1_state_raw = tmp;
+        std::int8_t step = rot_1_t::get_step(rot_1_state_raw_mem, rot_1_state_raw);
+
+        if (step != 0)
+        {
+            rot_1_pos += step;
+            rot_1_p[swi_1]->step(step);
+            utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 0>::set_pin_toggle();
+            dbg.print_hex_byte(step);
+            dbg.print_ascii(10);
+            dbg.usart_dbg_flush();
+        }
+    }
     // #ifdef SERIAL_DBG
 
     //     dbg.print_hex_byte(rot_1_pos);
-    //     dbg.print_hex_byte(step);
-    //     dbg.print_ascii(10);
-    //     dbg.usart_dbg_flush();
+
     // #endif
 }
 

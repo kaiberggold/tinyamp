@@ -27,10 +27,13 @@ using rot_1_t = utils::RotaryEncoderStatic<std::uint8_t, std::uint8_t, digital_p
 static volatile std::uint8_t spi0_state = 0;
 static volatile std::uint16_t ad_raw_val_0 = 0;
 utils::RotaryEncoderVirtual<std::uint8_t, std::int8_t> rot_virtual_1(0, 100, 5, 50);
+utils::RotaryEncoderVirtual<std::uint8_t, std::int8_t> rot_virtual_2(0, 100, 5, 50);
+utils::RotaryEncoderVirtual<std::uint8_t, std::int8_t> *rot_1_p[2] = {&rot_virtual_1, &rot_virtual_2};
 
 volatile std::uint8_t rot_1_state_raw;
 volatile std::uint8_t rot_1_state_raw_mem;
 volatile std::int8_t rot_1_pos = 0;
+volatile std::uint8_t swi_1 = 0;
 
 // utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 0>::get_pin() * 2 + utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1>::get_pin());
 
@@ -53,15 +56,14 @@ int main()
 
   led.set_to_out_pin();
   led.set_pin(true);
-  // digital_pin_t<1, 0>::set_pin(true);
-  // digital_pin_t<1, 0>::set_to_in_pin();
+  digital_pin_t<1, 2>::set_pin(true);
+  digital_pin_t<1, 2>::set_to_in_pin();
 
 #ifdef INTERRUPTS
   utils::Interrupts::enable_all_interrupts();
 
   utils::TimerIf<timer_1_t, std::uint8_t, std::uint8_t, std::uint16_t, 0>::init(start_time);
-  // utils::Interrupts::enable_pin_change_port<std::uint8_t, std::uint8_t, 1>();
-  // utils::Interrupts::enable_pin_change_pin<std::uint8_t, std::uint8_t, 8>();
+  utils::Interrupts::enable_pin_change_pin<std::uint8_t, std::uint8_t, 10>();
 
 #endif
   constexpr std::uint32_t i2c_freq = UINT32_C(100000);
@@ -129,7 +131,8 @@ int main()
 #endif
 #ifdef SERIAL_DBG
 
-    dbg.print_hex_byte(rot_virtual_1.get_pos());
+    dbg.print_hex_byte(rot_1_p[0]->get_pos());
+    dbg.print_hex_byte(rot_1_p[1]->get_pos());
     dbg.print_ascii(10);
     dbg.usart_dbg_flush();
 #endif
