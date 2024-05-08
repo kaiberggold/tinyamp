@@ -2,7 +2,7 @@
 #include "hal.h"
 #include <cstdint>
 #include <util/delay.h>
-#undef SERIAL_DBG
+// #undef SERIAL_DBG
 #define INTERRUPTS
 
 // #include <avr/io.h>
@@ -26,7 +26,7 @@ using rot_1_t = utils::RotaryEncoderStatic<std::uint8_t, std::uint8_t, digital_p
 
 static volatile std::uint8_t spi0_state = 0;
 static volatile std::uint16_t ad_raw_val_0 = 0;
-utils::RotaryEncoderVirtual<std::uint8_t, std::uint8_t> rot_virtual_1(0, 100, 50, 5);
+utils::RotaryEncoderVirtual<std::uint8_t, std::int8_t> rot_virtual_1(0, 100, 5, 50);
 
 volatile std::uint8_t rot_1_state_raw;
 volatile std::uint8_t rot_1_state_raw_mem;
@@ -126,6 +126,12 @@ int main()
     dbg.print_ascii(10);
     dbg.usart_dbg_flush();
 #endif
+#endif
+#ifdef SERIAL_DBG
+
+    dbg.print_hex_byte(rot_virtual_1.get_pos());
+    dbg.print_ascii(10);
+    dbg.usart_dbg_flush();
 #endif
 
     i++;

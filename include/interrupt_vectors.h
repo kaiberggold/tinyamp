@@ -23,15 +23,16 @@ void __vector_4(void)
 
     std::int8_t step = rot_1_t::get_step(rot_1_state_raw_mem, rot_1_state_raw);
     rot_1_pos += step;
+    rot_virtual_1.step(step);
     // if (step != 0)
     //   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 0>::set_pin_toggle();
-#ifdef SERIAL_DBG
+    // #ifdef SERIAL_DBG
 
-    dbg.print_hex_byte(rot_1_pos);
-    dbg.print_hex_byte(step);
-    dbg.print_ascii(10);
-    dbg.usart_dbg_flush();
-#endif
+    //     dbg.print_hex_byte(rot_1_pos);
+    //     dbg.print_hex_byte(step);
+    //     dbg.print_ascii(10);
+    //     dbg.usart_dbg_flush();
+    // #endif
 }
 
 // // spi0 finished
