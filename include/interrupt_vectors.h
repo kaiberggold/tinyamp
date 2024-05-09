@@ -20,13 +20,12 @@ void __vector_4(void)
 {
     swi_1 = static_cast<std::uint8_t>(utils::DigitalPin<std::uint8_t, std::uint8_t, 1, 2>::get_pin());
 
-    std::uint8_t tmp = rot_1_t::get_raw_state();
-    if (tmp != rot_1_state_raw_mem)
+    std::uint8_t new_state = rot_1_t::get_raw_state();
+    if (new_state != rot_1_state_raw)
     {
-        rot_1_state_raw_mem = rot_1_state_raw;
-        rot_1_state_raw = tmp;
-        std::int8_t step = rot_1_t::get_step(rot_1_state_raw_mem, rot_1_state_raw);
 
+        std::int8_t step = rot_1_t::get_step(rot_1_state_raw, new_state);
+        rot_1_state_raw = new_state;
         if (step != 0)
         {
             rot_1_pos += step;

@@ -31,7 +31,6 @@ utils::RotaryEncoderVirtual<std::uint8_t, std::int8_t> rot_virtual_2(0, 100, 5, 
 utils::RotaryEncoderVirtual<std::uint8_t, std::int8_t> *rot_1_p[2] = {&rot_virtual_1, &rot_virtual_2};
 
 volatile std::uint8_t rot_1_state_raw;
-volatile std::uint8_t rot_1_state_raw_mem;
 volatile std::int8_t rot_1_pos = 0;
 volatile std::uint8_t swi_1 = 0;
 
@@ -44,15 +43,12 @@ volatile std::uint8_t swi_1 = 0;
 
 int main()
 {
-  // utils::DigitalPin<std::uint8_t, std::uint8_t, 1, 2>::set_pin(false);
-  // utils::DigitalPin<std::uint8_t, std::uint8_t, 1, 2>::set_to_in_pin();
   digital_pin_t<0, 0>::set_to_out_pin();
   digital_pin_t<0, 0>::set_pin(true);
   utils::DigitalPin<std::uint8_t, std::uint8_t, 0, 1> led;
 
   rot_1_t::init();
   rot_1_state_raw = rot_1_t::get_raw_state();
-  rot_1_state_raw_mem = rot_1_state_raw;
 
   led.set_to_out_pin();
   led.set_pin(true);
