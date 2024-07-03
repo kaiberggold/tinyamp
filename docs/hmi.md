@@ -51,7 +51,7 @@ class `Hmi`{
     + setSound(bool sound)
 
 }
-class `Actuators`{
+class `OutputActuators`{
 
     + getVolatileValue(int i) int
     + setVolatileValue(int i) int 
@@ -68,7 +68,7 @@ class InputActuators{
 }
 
  <<interface>>Hmi
- <<interface>>Actuators
+ <<interface>>OutputActuators
  <<interface>>InputActuators
 <<interface>>InputEvents
 
@@ -82,7 +82,7 @@ class `ConcreteHmi`{
 
 
 
-class `Actuator`{
+class `OutputActuator`{
     - hw: ActuatorHw
     - address: int
     - index: int
@@ -129,16 +129,16 @@ class `SoundSettingParams`{
 class `ConcreteActuators`{
     - valVolatile: List ~int~
     - valNonVolatile: List ~int~
-    - actuators: List ~Actuator~
+    - OutputActuators: List ~OutputActuator~
     +getVolatileValue(int i) int
     +setVolatileValue(int i) int 
 }
 
 
    SoundSettingParams "1" <-- "*"  SoundSetting 
- ConcreteActuators"1" --> "1"Actuators
- Sound"1" --> "1"Actuators
-ConcreteActuators"1" --> "*"Actuator
+ ConcreteActuators"1" --> "1"OutputActuators
+ Sound"1" --> "1"OutputActuators
+ConcreteActuators"1" --> "*"OutputActuator
 ConcreteInputActuators"1" --> "*"InputActuators
 Sound "1" --> "1"Hmi
 ConcreteHmi "1" --> "1"Hmi
@@ -157,7 +157,7 @@ sequenceDiagram
     Inputevents ->> Hmi: VirtualActuatorEvent (1,Short)
     Hmi ->>Sound: toggleSound()
     Sound ->> Sound: activeSound =1-activeSound
-    Sound ->> Actuators: For all in i: <br>If value changed: <br> setVolatileValue (i,SoundSetting.val[i])
-    Actuators ->> Actuator: setVolatileValue(val)
-    Actuator ->> PotiIC: I2CWrite Value
+    Sound ->> OutputActuators: For all in i: <br>If value changed: <br> setVolatileValue (i,SoundSetting.val[i])
+    OutputActuators ->> OutputActuator: setVolatileValue(val)
+    OutputActuator ->> PotiIC: I2CWrite Value
 ```
