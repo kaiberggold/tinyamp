@@ -38,20 +38,48 @@
 
 ### Main Classes
 
-
 ```mermaid
+
 classDiagram
+direction BT
+
+
 
 class `Hmi`{
     -a
+    + toggleSound()
+    + setSound(bool sound)
+
+}
+class `Actuators`{
+
+    + getVolatileValue(int i) int
+    + setVolatileValue(int i) int 
+
 }
 
-class Sound{
- -SoundSetting A
-- SoundSetting B
-- toggleSound()
-- setSound()
+
+class `InputEvents`{
+
++ buttonEvent (init index, type t)
 }
+class InputActuators{
+-a
+}
+
+ <<interface>>Hmi
+ <<interface>>Actuators
+ <<interface>>InputActuators
+<<interface>>InputEvents
+
+
+class `ConcreteHmi`{
+    -a
+    + toggleSound()
+    + setSound(bool sound)
+
+}
+
 
 
 class `Actuator`{
@@ -61,23 +89,34 @@ class `Actuator`{
     +getVolatileValue() int
     +setVolatileValue() int 
 }
-
-
-class `ConcreteActuators`{
-    -
-    +getVolatileValue(int i) int
-    +setVolatileValue(int i) int 
+class Sound{
+ -SoundSetting A
+- SoundSetting B
+- activeSound: int
++ toggleSound()
++ setSound()
 }
 
-class `Actuators`{
-    - valVolatile: List ~int~
-    - valNonVolatile: List ~int~
-    + getVolatileValue(int i) int
-    + setVolatileValue(int i) int 
 
+
+class ConcreteInputActuators{
+-a
 }
- <<interface>>Actuators
+class `ConcreteInputEvents`{
 
+-a
+}
+
+
+
+
+
+class `SoundSetting`{
+    -val: List ~int~
+    +getN() int
+    +getCurrentValue(int i) int
+    +setCurrentValue(int i, SoundSettingParams param) int
+}
 
 class `SoundSettingParams`{
     -default: List ~int~
@@ -87,16 +126,38 @@ class `SoundSettingParams`{
     +getMax(int i) int
     +getMin(int i) int
 }
-
-class `SoundSetting`{
-    -val: List ~int~
-    +getN() int
-    +getCurrentValue(int i) int
-    +setCurrentValue(int i, SoundSettingParams param) int
+class `ConcreteActuators`{
+    - valVolatile: List ~int~
+    - valNonVolatile: List ~int~
+    - actuators: List ~Actuator~
+    +getVolatileValue(int i) int
+    +setVolatileValue(int i) int 
 }
 
-   SoundSettingParams "1" --* "*"  SoundSetting 
- ConcreteActuators"1" --> "1"Actuators
- Sound"1" --> "*"Actuators
 
+   SoundSettingParams "1" <-- "*"  SoundSetting 
+ ConcreteActuators"1" --> "1"Actuators
+ Sound"1" --> "1"Actuators
+ConcreteActuators"1" --> "*"Actuator
+ConcreteInputActuators"1" --> "*"InputActuators
+Sound "1" --> "1"Hmi
+ConcreteHmi "1" --> "1"Hmi
+ Sound  "1" -->  "1" SoundSetting
+ConcreteInputEvents "1" --> "1"InputEvents
+
+```
+### Button Sequence Example
+
+```mermaid
+sequenceDiagram
+    InputActuators ->> InputActuators: Sw1 off -> on
+    InputActuators ->> Inputevents:  ActuatorEvent (1, true)
+    InputActuators ->> InputActuators: Sw1 on -> off
+    InputActuators ->> Inputevents:  ActuatorEvent (1, off)
+    Inputevents ->> Hmi: VirtualActuatorEvent (1,Short)
+    Hmi ->>Sound: toggleSound()
+    Sound ->> Sound: activeSound =1-activeSound
+    Sound ->> Actuators: For all in i: <br>If value changed: <br> setVolatileValue (i,SoundSetting.val[i])
+    Actuators ->> Actuator: setVolatileValue(val)
+    Actuator ->> PotiIC: I2CWrite Value
 ```
