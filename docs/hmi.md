@@ -166,18 +166,3 @@ direction TD
 ```
 
 
-### Button Sequence Example
-
-```mermaid
-sequenceDiagram
-    InputActuators ->> InputActuators: Sw1 off -> on
-    InputActuators ->> Inputevents:  ActuatorEvent (1, true)
-    InputActuators ->> InputActuators: Sw1 on -> off
-    InputActuators ->> Inputevents:  ActuatorEvent (1, off)
-    Inputevents ->> Hmi: VirtualActuatorEvent (1,Short)
-    Hmi ->>Sound: toggleSound()
-    Sound ->> Sound: activeSound =1-activeSound
-    Sound ->> OutputActuators: For all in i: <br>If value changed: <br> setVolatileValue (i,SoundSetting.val[i])
-    OutputActuators ->> OutputActuator: setVolatileValue(val)
-    OutputActuator ->> PotiIC: I2CWrite Value
-```
