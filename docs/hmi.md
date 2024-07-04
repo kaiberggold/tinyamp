@@ -39,113 +39,133 @@
 ### Main Classes
 
 ```mermaid
-
 classDiagram
-direction BT
+direction TD
+    class InputActuatorEventType {
+        <<enumeration>>
+        BUTTON_RISING_EDGE
+        BUTTON_FALLING_EDGE
+        ROTARY_ENCODER_LEFT
+        ROTARY_ENCODER_RIGHT
+    }
 
+    class InputEventType {
+        <<enumeration>>
+        TOGGLE_BUTTON_1_SHORT
+        TOGGLE_BUTTON_1_LONG
+        ...
+        TOGGLE_BUTTON_1_2_LONG
+        ...
+        ROTARY_ENCODER_1_LEFT_SLOW
+        ROTARY_ENCODER_1_RIGHT_SLOW
+        ROTARY_ENCODER_1_LEFT_FAST
+        ROTARY_ENCODER_1_RIGHT_FAST
+        ...
+    }
 
+    class IInputActuatorsEvents {
+        <<interface>>
+        +~setInputActuatorEvent(InputActuatorEventType inputActuatorEvent)
+    }
 
-class `Hmi`{
-    -a
-    + toggleSound()
-    + setSound(bool sound)
+    class IInputEvents {
+        <<interface>>
+        +~setInputEvent(InputEventType inputEvent)
+    }
+    
+    class IHmiEvents {
+        <<interface>>
+        +~setToggleSound()
+    }
 
-}
-class `OutputActuators`{
+    class IOutputEvents {
+        <<interface>>
+        +~setOutputEvent(int index, int value)
+        +~setOutputEvent(int startIndex, List<int> values)
+    }
 
-    + getVolatileValue(int i) int
-    + setVolatileValue(int i) int 
+    class PotiIcIf {
+        <<interface>>
+        +~set_val_volatile(int poti_id, int value)
+    }
 
-}
+    class IOutputActuatorEvents {
+        <<interface>>
+        +~setOutputActuatorEvent(List <int> indices, List <int> values)
+    }
 
+    class InputActuatorsImpl {
+        -IInputActuatorsEvents* eventGenerator
+        +InputActuatorsImpl(IInputActuatorsEvents* generator)
+        +simulateActuatorEvent(InputActuatorEventType inputActuatorEvent)
+    }
 
-class `InputEvents`{
+    class InputEventsImpl {
+        -IInputEvents* eventHandler
+        +InputEventsImpl(IInputEvents* handler)
+        +setInputActuatorEvent(InputActuatorEventType inputActuatorEvent)
+    }
 
-+ buttonEvent (init index, type t)
-}
-class InputActuators{
--a
-}
+    class OutputEventsImpl {
+        -IOutputEvents* eventHandler
+        +OutputEventsImpl(IOutputEvents* handler)
+        +setOutputEvent(int index, int value)
+        +setOutputEvent(int startIndex, List<int> values)
+    }
 
- <<interface>>Hmi
- <<interface>>OutputActuators
- <<interface>>InputActuators
-<<interface>>InputEvents
+    class OutputActuatorImpl {
+        <<interface>>
+        +setOutputActuatorEvent(List <int> indices, List <int> values)
+    }
 
+    class Hmi {
+        +setInputEvent(InputEventType inputEvent)
+    }
 
-class `ConcreteHmi`{
-    -a
-    + toggleSound()
-    + setSound(bool sound)
+    class Sound {
+        +setToggleSound()
+    }
 
-}
+    class Mp44xx {
+       +set_val_volatile(int poti_id, int value)
+    }
 
-
-
-class `OutputActuator`{
-    - hw: ActuatorHw
-    - address: int
-    - index: int
-    +getVolatileValue() int
-    +setVolatileValue() int 
-}
-class Sound{
- -SoundSetting A
-- SoundSetting B
-- activeSound: int
-+ toggleSound()
-+ setSound()
-}
-
-
-
-class ConcreteInputActuators{
--a
-}
-class `ConcreteInputEvents`{
-
--a
-}
-
-
-
-
-
-class `SoundSetting`{
+    class `SoundSetting`{
     -val: List ~int~
     +getN() int
     +getCurrentValue(int i) int
     +setCurrentValue(int i, SoundSettingParams param) int
-}
+    }
 
-class `SoundSettingParams`{
-    -default: List ~int~
-    -min: List ~int~
-    -max: List ~int~
-    +getN() int
-    +getMax(int i) int
-    +getMin(int i) int
-}
-class `ConcreteActuators`{
-    - valVolatile: List ~int~
-    - valNonVolatile: List ~int~
-    - OutputActuators: List ~OutputActuator~
-    +getVolatileValue(int i) int
-    +setVolatileValue(int i) int 
-}
+    class `SoundSettingParams`{
+        -default: List ~int~
+        -min: List ~int~
+        -max: List ~int~
+        +getN() int
+        +getMax(int i) int
+        +getMin(int i) int
+    }
 
-
-   SoundSettingParams "1" <-- "*"  SoundSetting 
- ConcreteActuators"1" --> "1"OutputActuators
- Sound"1" --> "1"OutputActuators
-ConcreteActuators"1" --> "*"OutputActuator
-ConcreteInputActuators"1" --> "*"InputActuators
-Sound "1" --> "1"Hmi
-ConcreteHmi "1" --> "1"Hmi
- Sound  "1" -->  "1" SoundSetting
-ConcreteInputEvents "1" --> "1"InputEvents
+    IInputActuatorsEvents <|.. InputEventsImpl
+    IInputEvents <|.. Hmi
+    Hmi --> IHmiEvents
+    IHmiEvents <|.. Sound
+    InputEventType <|.. IInputEvents
+    InputActuatorEventType <|.. IInputActuatorsEvents
+    InputActuatorsImpl --> IInputActuatorsEvents
+    InputEventsImpl --> IInputEvents
+    IOutputEvents <|.. OutputEventsImpl
+    IOutputActuatorEvents <--  OutputEventsImpl
+    IOutputActuatorEvents <|.. OutputActuatorImpl
+    Sound --> IOutputEvents
+    SoundSettingParams  <--  SoundSetting 
+    Sound --> SoundSetting
+    PotiIcIf <--  OutputActuatorImpl
+    PotiIcIf <|.. Mp44xx
 
 ```
+
+
 ### Button Sequence Example
 
 ```mermaid
