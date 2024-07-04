@@ -63,52 +63,58 @@ direction TD
         ...
     }
 
-    class IInputActuatorsEvents {
+    class InputActuatorsEventsIf {
         <<interface>>
         +~setInputActuatorEvent(InputActuatorEventType inputActuatorEvent)
     }
+    style InputActuatorsEventsIf fill:#FFDD55
 
-    class IInputEvents {
+    class InputEventsIf {
         <<interface>>
         +~setInputEvent(InputEventType inputEvent)
     }
-    
-    class IHmiEvents {
+    style InputEventsIf fill:#FFDD55
+
+    class HmiEventsIf {
         <<interface>>
         +~setToggleSound()
     }
+   style HmiEventsIf fill:#FFDD55
 
-    class IOutputEvents {
+    class OutputEventsIf {
         <<interface>>
         +~setOutputEvent(int index, int value)
         +~setOutputEvent(int startIndex, List<int> values)
     }
+    style OutputEventsIf fill:#FFDD55
 
     class PotiIcIf {
         <<interface>>
         +~set_val_volatile(int poti_id, int value)
     }
+    style PotiIcIf fill:#FFDD55
 
-    class IOutputActuatorEvents {
+    class OutputActuatorEventsIf {
         <<interface>>
         +~setOutputActuatorEvent(List <int> indices, List <int> values)
     }
+    style OutputActuatorEventsIf fill:#FFDD55
 
     class InputActuatorsImpl {
-        -IInputActuatorsEvents* eventGenerator
-        +InputActuatorsImpl(IInputActuatorsEvents* generator)
+        -InputActuatorsEventsIf* eventGenerator
+        +InputActuatorsImpl(InputActuatorsEventsIf* generator)
         +simulateActuatorEvent(InputActuatorEventType inputActuatorEvent)
     }
 
     class InputEventsImpl {
-        -IInputEvents* eventHandler
-        +InputEventsImpl(IInputEvents* handler)
+        -InputEventsIf* eventHandler
+        +InputEventsImpl(InputEventsIf* handler)
         +setInputActuatorEvent(InputActuatorEventType inputActuatorEvent)
     }
 
     class OutputEventsImpl {
-        -IOutputEvents* eventHandler
-        +OutputEventsImpl(IOutputEvents* handler)
+        -OutputEventsIf* eventHandler
+        +OutputEventsImpl(OutputEventsIf* handler)
         +setOutputEvent(int index, int value)
         +setOutputEvent(int startIndex, List<int> values)
     }
@@ -146,18 +152,18 @@ direction TD
         +getMin(int i) int
     }
 
-    IInputActuatorsEvents <|.. InputEventsImpl
-    IInputEvents <|.. Hmi
-    Hmi --> IHmiEvents
-    IHmiEvents <|.. Sound
-    InputEventType <|.. IInputEvents
-    InputActuatorEventType <|.. IInputActuatorsEvents
-    InputActuatorsImpl --> IInputActuatorsEvents
-    InputEventsImpl --> IInputEvents
-    IOutputEvents <|.. OutputEventsImpl
-    IOutputActuatorEvents <--  OutputEventsImpl
-    IOutputActuatorEvents <|.. OutputActuatorImpl
-    Sound --> IOutputEvents
+    InputActuatorsEventsIf <|.. InputEventsImpl
+    InputEventsIf <|.. Hmi
+    Hmi --> HmiEventsIf
+    HmiEventsIf <|.. Sound
+    InputEventType <|.. InputEventsIf
+    InputActuatorEventType <|.. InputActuatorsEventsIf
+    InputActuatorsImpl --> InputActuatorsEventsIf
+    InputEventsImpl --> InputEventsIf
+    OutputEventsIf <|.. OutputEventsImpl
+    OutputActuatorEventsIf <--  OutputEventsImpl
+    OutputActuatorEventsIf <|.. OutputActuatorImpl
+    Sound --> OutputEventsIf
     SoundSettingParams  <--  SoundSetting 
     Sound --> SoundSetting
     PotiIcIf <--  OutputActuatorImpl
